@@ -208,8 +208,7 @@ const {
   isAdminVerification,
 } = require("../middlewares/loginMiddlewares");
 const {
-  getProductsByCategoryMiddleware,
-  getProductByIdMiddleware,
+  getProductsMiddleware,
   postProductMiddleware,
   putProductMiddleware,
   deleteProductMiddleware,
@@ -218,10 +217,10 @@ const {
 const router = express.Router();
 
 /* GET products page. */
-router.get("/", getProductsByCategoryMiddleware);
+router.get("/", getProductsMiddleware);
 
-/* GET product page. */
-router.get("/:id", getProductByIdMiddleware);
+// /* GET product page. */
+// router.get("/:id", getProductByIdMiddleware);
 
 /* POST products page. */
 router.post("/", loginVerification, isAdminVerification, postProductMiddleware);
