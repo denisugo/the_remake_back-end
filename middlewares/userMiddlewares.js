@@ -17,48 +17,55 @@ const getUserMiddleware = (req, res, next) => {
 };
 
 const updateUserMiddleware = async (req, res, next) => {
-  const role = roles.REGISTERED_ROLE;
-  //No need to check if id exists, it should nbe already checked!
+  //? No need to check if id exists, it should be already checked!
   const id = req.user.id;
 
-  // These two props should be checked here
-  const newValue = req.body.value;
-  const columnName = req.body.field;
-
+  //? Should only proceed when body is supplied
   if (req.body) {
+    //? These two props should be checked here
+    //? Should only proceed if both field and value were supplied
+    const newValue = req.body.value;
+    const columnName = req.body.field;
     if (newValue && columnName) {
-      const updated = await executeQuery(
-        { db, tableName, role, id, newValue, columnName },
-        updateValuesById
-      );
-      if (updated) return res.status(200).send("Updated"); //status is set manually for testing purposes
-
-      if (!updated && columnName === "username")
-        return res.status(400).send("This username is probably already in use");
+      try {
+        //? Id and newValue should be passed as an array because user can manually change them
+        //? Rows is always an array, so the first valuu only should be taken
+        const { rows } = await db.query(
+          `UPDATE ${tableNames.USERS} SET ${columnName} = $1 WHERE id = $2 RETURNING *;`,
+          [newValue, id]
+        );
+        if (rows[0]) return res.send("Updated");
+      } catch (error) {
+        //? Usernames should be unique, so if this rule is violated, a specific error message should be sent
+        if (/user_username_key/.exec(error.message))
+          return res
+            .status(400)
+            .send("This username is probably already in use");
+      }
     }
   }
   return res.status(400).send("Cannot be updated");
 };
 
-const deleteUserMiddleware = async (req, res, next) => {
-  const role = roles.ADMIN_ROLE;
+// const deleteUserMiddleware = async (req, res, next) => {
+//   const role = roles.ADMIN_ROLE;
 
-  if (req.body) {
-    const id = req.body.id;
-    if (id) {
-      const deleted = await executeQuery(
-        { db, tableName, role, id },
-        deleteValuesById
-      );
-      if (deleted) return res.status(204).send("Successfully deleted");
-    }
-  }
+//   if (req.body) {
+//     const id = req.body.id;
+//     if (id) {
+//       const deleted = await executeQuery(
+//         { db, tableName, role, id },
+//         deleteValuesById
+//       );
+//       if (deleted) return res.status(204).send("Successfully deleted");
+//     }
+//   }
 
-  return res.status(400).send("The operation cannot be done");
-};
+//   return res.status(400).send("The operation cannot be done");
+// };
 
 module.exports = {
   updateUserMiddleware,
-  deleteUserMiddleware,
+  // deleteUserMiddleware,
   getUserMiddleware,
 };

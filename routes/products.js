@@ -125,28 +125,6 @@
 /**
  * @swagger
  * /products/{id}:
- *  get:
- *    summary: Sends back an object of a product
- *    tags: [Product]
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
- *
- *    responses:
- *      200:
- *        description: Product object sent
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/Product'
- */
-
-/**
- * @swagger
- * /products/{id}:
  *  put:
  *    summary: Allows you to update a product
  *    tags: [Product]
@@ -216,16 +194,13 @@ const {
 
 const router = express.Router();
 
-/* GET products page. */
+//* GET products page.
 router.get("/", getProductsMiddleware);
 
-// /* GET product page. */
-// router.get("/:id", getProductByIdMiddleware);
-
-/* POST products page. */
+//* POST products page.
 router.post("/", loginVerification, isAdminVerification, postProductMiddleware);
 
-/* PUT product page. */
+//* PUT product page.
 router.put(
   "/:id",
   loginVerification,
@@ -233,7 +208,7 @@ router.put(
   putProductMiddleware
 );
 
-/* DELETE product page. */
+//* DELETE product page.
 router.delete(
   "/:id",
   loginVerification,

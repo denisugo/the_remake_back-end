@@ -1,6 +1,6 @@
 const { assert } = require("chai");
 const db = require("../../db");
-const { tableNames, roles } = require("../../config").constants;
+const { tableNames } = require("../../config").constants;
 
 const {
   getProductsMiddleware,
@@ -124,7 +124,6 @@ describe("Product middlewares", () => {
 
       afterEach(async () => {
         //? Reset recently updated product
-
         //? Execute update that will reset the query to its original values
         const queryCommand = `UPDATE ${tableName} SET (name, description, price, category, preview) = ('${selected.name}', '${selected.description}', '${selected.price}', '${selected.category}', '${selected.preview}') WHERE id = ${id};`;
         await db.query(queryCommand);

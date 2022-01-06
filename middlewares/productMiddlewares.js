@@ -37,11 +37,13 @@ const postProductMiddleware = async (req, res, next) => {
       );
       const queryCommand = `INSERT INTO ${tableNames.PRODUCTS}(${columns}) VALUES(${queryPrepared}) RETURNING *;`;
 
-      //? Retrieve the newly created product
-      const { rows } = await db.query(queryCommand, values);
-      if (rows[0]) {
-        return res.status(201).send(rows[0]);
-      }
+      try {
+        //? Retrieve the newly created product
+        const { rows } = await db.query(queryCommand, values);
+        if (rows[0]) {
+          return res.status(201).send(rows[0]);
+        }
+      } catch (error) {}
     }
   }
   return res.status(400).send("Check your input");
@@ -57,13 +59,15 @@ const putProductMiddleware = async (req, res, next) => {
       const columnName = req.body.field;
       const newValue = req.body.value;
 
-      //? Getting verification that the new value was set,
-      //? If so, send back status 200
-      const { rows } = await db.query(
-        `UPDATE ${tableNames.PRODUCTS} SET ${columnName} = $1 WHERE id = $2 RETURNING *;`,
-        [newValue, id]
-      );
-      if (rows[0]) return res.send("Updated");
+      try {
+        //? Getting verification that the new value was set,
+        //? If so, send back status 200
+        const { rows } = await db.query(
+          `UPDATE ${tableNames.PRODUCTS} SET ${columnName} = $1 WHERE id = $2 RETURNING *;`,
+          [newValue, id]
+        );
+        if (rows[0]) return res.send("Updated");
+      } catch (error) {}
     }
   }
   //? Handle error
@@ -76,18 +80,20 @@ const deleteProductMiddleware = async (req, res, next) => {
 
   //? It should only proceed if id was supplied
   if (id) {
-    //? Getting verification that the new value was removed,
-    //? If so, send back status 202
-    //? An additional measure should be applied here. Id should passsed as
-    //? an array. It is very important because a user can edit the value of
-    //? the id manually.
+    try {
+      //? Getting verification that the new value was removed,
+      //? If so, send back status 202
+      //? An additional measure should be applied here. Id should passsed as
+      //? an array. It is very important because a user can edit the value of
+      //? the id manually.
 
-    const { rows } = await db.query(
-      `DELETE FROM ${tableNames.PRODUCTS} WHERE id = $1 RETURNING *;`,
-      [id]
-    );
+      const { rows } = await db.query(
+        `DELETE FROM ${tableNames.PRODUCTS} WHERE id = $1 RETURNING *;`,
+        [id]
+      );
 
-    if (rows[0]) return res.status(204).send("Successfully deleted");
+      if (rows[0]) return res.status(204).send("Successfully deleted");
+    } catch (error) {}
   }
   //* Error handler
   return res.status(400).send("The operation cannot be done");

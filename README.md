@@ -1,13 +1,49 @@
-# Getting started
+# The remake (back-end)
 
-## Links
+## Overview
+
+This is the remake of my previous portfolio project. It is aimed for improving all the cons of the project. The Sql database remains the same, back-end part should be slightly upgraded, front-end will also get more features.
+
+## Features
+
+- JWT instead of redux
+- Oauth
+- Description of each function
+- Simple back-end structure
+
+## Comment styling
+
+- // Should be used for commenting unused parts of code
+- //\* Should be used for short describing of code parts, generally for introductions
+- //? Should be used for more detailed describing of code
+- // TODO: Should be used for leaving certain tasks within code
+- //! Should be used for indicating of high priority notes
+
+## Roadmap
+
+### Front-end
+
+- Refactor and add a fully functional validation on inputs
+- Comment each component
+- JWT should expire
+
+### Back-end
+
+- Refactor all middlewares
+- Remove roles in SQL, so it can be published onto Heroku
+- Cookie session should expire
+- Get rid of query tests and refactor middleware tests
+
+## Getting started
+
+### Links
 
 This is the API. It should work with [this client](https://github.com/denisugo/next-client-portfolio)
 
 - All endpoints have the following prefix api/v1/
 - The endpoint documentation is on api/docs/
 
-## Initial setup
+### Initial setup
 
 To make it work, you should setup the environment variables that are provided in the following lines:
 
@@ -18,24 +54,24 @@ ORIGIN = http://localhost:3000
 SECRET_ENCRYPTION_KEY = micro_Cat
 SECRET_STRIPE_KEY = Your_Stripr_SK_Key
 
-SQL_USER = Your_SQL_Username
-SQL_PASSWORD = Your_SQL_Password
+SQL_USER = myuser
+SQL_PASSWORD = secret
 SQL_PORT = 5432
 SQL_HOST = localhost
-SQL_DATABASE = Your_SQL_DB_Name
+SQL_DATABASE = the_remake
 ```
 
  <br />
 
-# SQL
+## SQL
 
 ![Diagram io](/Back-end-portfolio.png)
 
  <br />
 
-# Pros & Cons
+## Pros & Cons
 
-## Pros
+### Pros
 
 - Several roles are used in the database to improve authorization
 - Tests cover all important database settings
@@ -43,6 +79,6 @@ SQL_DATABASE = Your_SQL_DB_Name
 - Easy-to-use endpoint documentation builded with _Swagger_
 - All SQL query function could be reused in other projects
 
-## Cons
+### Cons
 
 - Query scripts don't provide proper check, if some SQL constrain rules are violeted. It just returns _undefined_ when an error is trown
