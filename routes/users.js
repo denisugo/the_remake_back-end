@@ -92,7 +92,6 @@ const express = require("express");
 const router = express.Router();
 const {
   loginVerification,
-  userIdVerification,
   isAdminVerification,
 } = require("../middlewares/loginMiddlewares");
 

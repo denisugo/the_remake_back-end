@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "nodemon": "nodemon ./bin/www",
-    "test": "mocha --watch ./__tests__/middlewares/userMiddlewares.test.js"
+    "test": "mocha --watch ./__tests__/app/app.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

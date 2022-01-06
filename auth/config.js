@@ -8,32 +8,33 @@ const { tableNames, roles } = require("../config/index").constants;
 
 const authCheck = async (username, password, done) => {
   console.log("username " + username);
-  const role = roles.PUBLIC_ROLE;
-  const tableName = tableNames.USERS;
-  try {
-    const user = await executeQuery(
-      { db, tableName, role, username, password },
-      selectWithUsernameAndPassword
-    );
 
-    if (user) return done(null, user);
+  //? username and password should be passed as array because users can modify them.
+  try {
+    const { rows } = await db.query(
+      `SELECT * FROM ${tableNames.USERS} WHERE username = $1 AND password = $2;`,
+      [username, password]
+    );
+    //? If rows[0] is not undefined, a user is found
+    if (rows[0]) return done(null, rows[0]);
 
     return done(null, false, { message: "Incorrect username or password" });
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     return done(error);
   }
 };
 
 const deserializedUserFinder = async (id, done) => {
   console.log("deserializing user", id);
-  const role = roles.REGISTERED_ROLE;
-  const tableName = tableNames.USERS;
   let user;
   let err;
+  //? Id should be passed as array because users can modify it.
+  //? Id is stored in cookies
   try {
-    user = await executeQuery({ db, tableName, role, id }, selectById);
-    delete user.password;
+    user = (
+      await db.query(`SELECT * FROM ${tableNames.USERS} WHERE id = $1;`, [id])
+    ).rows[0];
   } catch (error) {
     err = error;
   }

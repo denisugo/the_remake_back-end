@@ -1,8 +1,11 @@
 const { assert } = require("chai");
-const { authCheck, deserializedUserFinder } = require("../auth/config");
+const { authCheck, deserializedUserFinder } = require("../../auth/config");
+const db = require("../../db");
+const { tableNames } = require("../../config").constants;
 
 describe("Auth", () => {
   describe("authCheck", () => {
+    //* Mock done function
     let done;
     beforeEach(() => {
       done = (err, result, message) => {
@@ -15,17 +18,15 @@ describe("Auth", () => {
     });
 
     it("Should find a user with username and password provided", async () => {
+      //* Credentials
       const username = "jb";
       const password = "secret";
+      const id = 1;
 
-      const expected = {
-        id: 1,
-        first_name: "Joe",
-        last_name: "Barbora",
-        email: "joe_barbora@gmail.com",
-        username,
-        is_admin: true,
-      };
+      //* Expected user object
+      const expected = (
+        await db.query(`SELECT * FROM ${tableNames.USERS} WHERE id = ${id};`)
+      ).rows[0];
 
       const output = await authCheck(username, password, done);
 
@@ -34,9 +35,11 @@ describe("Auth", () => {
       assert.isUndefined(output.message);
     });
     it("Should return a message that the username or password were incorrect (incorrect username)", async () => {
+      //* Credentials
       const username = "logi";
       const password = "secret";
 
+      //* Expected object
       const expected = { message: "Incorrect username or password" };
 
       const output = await authCheck(username, password, done);
@@ -46,9 +49,11 @@ describe("Auth", () => {
       assert.deepEqual(output.message, expected);
     });
     it("Should return a message that the username or password were incorrect (incorrect password)", async () => {
+      //* Credentials
       const username = "jb";
       const password = "sec";
 
+      //* Expected object
       const expected = { message: "Incorrect username or password" };
 
       const output = await authCheck(username, password, done);
@@ -60,6 +65,7 @@ describe("Auth", () => {
   });
 
   describe("deserializedUserFinder", () => {
+    //* Mock done function
     let done;
     let result;
     let err;
@@ -73,15 +79,10 @@ describe("Auth", () => {
     it("Should find a user by id", async () => {
       const id = 1;
 
-      const expected = {
-        id: 1,
-        first_name: "Joe",
-        last_name: "Barbora",
-        email: "joe_barbora@gmail.com",
-        username: "jb",
-
-        is_admin: true,
-      };
+      //* Expected user object
+      const expected = (
+        await db.query(`SELECT * FROM ${tableNames.USERS} WHERE id = ${id};`)
+      ).rows[0];
 
       await deserializedUserFinder(id, done);
 
