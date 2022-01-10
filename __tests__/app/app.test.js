@@ -69,11 +69,17 @@ describe("App", () => {
 
     it("Should register a new user", (done) => {
       //* Create a request
-      server.post("/api/v1/register").send(body).expect(201, done);
+      server
+        .post("/api/v1/register")
+        .send(body)
+        .expect(200)
+        .then(() => {
+          server.get("/api/v1/users").expect(200, done);
+        });
     });
   });
 
-  describe("PUT/users/:id", () => {
+  describe("PUT/users/", () => {
     //* Initial server setup
     const server = request.agent(`http://localhost:${process.env.PORT}`);
 

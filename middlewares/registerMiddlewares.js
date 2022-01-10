@@ -25,7 +25,8 @@ const registerMiddleware = async (req, res, next) => {
         const { rows } = await db.query(queryCommand, values);
 
         if (rows[0]) {
-          res.status(201).send(rows[0]);
+          //res.status(201).send(rows[0]);
+          return next();
         }
       } catch (error) {
         //? Usernames should be unique, so if this rule is violated, a specific error message should be sent
@@ -34,8 +35,6 @@ const registerMiddleware = async (req, res, next) => {
             .status(400)
             .send({ message: "This username is probably already in use" });
       }
-
-      return next();
     }
   }
 
