@@ -73,12 +73,10 @@ SQL_DATABASE = the_remake
 
 ### Pros
 
-- Several roles are used in the database to improve authorization
 - Tests cover all important database settings
 - Well developed auth schema
 - Easy-to-use endpoint documentation builded with _Swagger_
-- All SQL query function could be reused in other projects
 
 ### Cons
 
-- Query scripts don't provide proper check, if some SQL constrain rules are violeted. It just returns _undefined_ when an error is trown
+- Nothing

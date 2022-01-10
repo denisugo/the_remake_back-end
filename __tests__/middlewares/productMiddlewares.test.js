@@ -15,7 +15,7 @@ describe("Product middlewares", () => {
     nextUsed = true;
   };
 
-  //? Mocking res function
+  //? Mocking res object
   //? Now it can mock .send, .status, .clearCookies
   const res = {
     status: (code) => {

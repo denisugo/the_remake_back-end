@@ -27,6 +27,7 @@ app.use(
     secret: process.env.SECRET_ENCRYPTION_KEY || "default",
     resave: false,
     saveUninitialized: false,
+    cookie: { maxAge: 60 * 60 * 24 * 1000 }, //? one day in miliseconds
   })
 );
 app.use(express.json());

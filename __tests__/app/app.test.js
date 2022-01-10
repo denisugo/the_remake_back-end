@@ -48,58 +48,30 @@ describe("App", () => {
     });
   });
 
-  // describe("POST /register", () => {
-  //   const username = "ronnie123-456-222";
-  //   const password = "new-secret-pass";
-  //   const email = "ronnie_adams@yandex.ru";
-  //   const first_name = "Ronnie";
-  //   const last_name = "Adams";
+  describe("POST /register", () => {
+    //* New user parameters
+    const body = {
+      username: "ronnie123_456_222",
+      password: "new-secret-pass",
+      email: "ronnie_adams@yandex.ru",
+      first_name: "Ronnie",
+      last_name: "Adams",
+    };
 
-  //   const server = request.agent(`http://localhost:${process.env.PORT}`);
+    //* Initial server setup
+    const server = request.agent(`http://localhost:${process.env.PORT}`);
 
-  //   after(async () => {
-  //     const role = roles.ADMIN_ROLE;
-  //     const tableName = tableNames.USERS;
-  //     const queryCommand =
-  //       "DELETE FROM " +
-  //       tableName +
-  //       " WHERE username = " +
-  //       "'" +
-  //       username +
-  //       "'";
-  //     await executeQuery({ db, role, tableName, queryCommand }, simpleQuery);
-  //   });
+    afterEach(async () => {
+      //? This will remove newly created user from users table
+      const queryCommand = `DELETE FROM ${tableNames.USERS} WHERE username = '${body.username}' RETURNING *;`;
+      await db.query(queryCommand);
+    });
 
-  //   it("Should register a new user", (done) => {
-  //     const body = {
-  //       username,
-  //       password,
-  //       email,
-  //       first_name,
-  //       last_name,
-  //     };
-
-  //     server.post("/api/v1/register").send(body).expect(200, done);
-  //   });
-  //   it("Should extract a new user from a cookie", (done) => {
-  //     const tableName = tableNames.USERS;
-  //     const role = roles.REGISTERED_ROLE;
-  //     executeQuery({ db, tableName, role, username }, selectByUsername).then(
-  //       ({ id }) => {
-  //         server.get("/api/v1/users/").expect(200, done);
-  //       }
-  //     );
-  //   });
-  //   // it("Should extract a new user from a cookie", (done) => {
-  //   //   const tableName = tableNames.USERS;
-  //   //   const role = roles.REGISTERED_ROLE;
-  //   //   executeQuery({ db, tableName, role, username }, selectByUsername).then(
-  //   //     ({ id }) => {
-  //   //       server.get("/api/v1/users/" + id).expect(200, done);
-  //   //     }
-  //   //   );
-  //   // });
-  // });
+    it("Should register a new user", (done) => {
+      //* Create a request
+      server.post("/api/v1/register").send(body).expect(201, done);
+    });
+  });
 
   describe("PUT/users/:id", () => {
     //* Initial server setup

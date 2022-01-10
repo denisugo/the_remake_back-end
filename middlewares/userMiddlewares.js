@@ -40,7 +40,7 @@ const updateUserMiddleware = async (req, res, next) => {
         if (/user_username_key/.exec(error.message))
           return res
             .status(400)
-            .send("This username is probably already in use");
+            .send({ message: "This username is probably already in use" });
       }
     }
   }

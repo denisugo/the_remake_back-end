@@ -4,9 +4,8 @@ const { tableNames, roles } = require("../config").constants;
 const stringCreator = require("../queries/stringCreator");
 
 const registerMiddleware = async (req, res, next) => {
-  const role = roles.PUBLIC_ROLE;
   const tableName = tableNames.USERS;
-
+  //? Should only proceed if all user parameters were supplied
   if (req.body) {
     if (
       req.body.username &&
@@ -15,14 +14,26 @@ const registerMiddleware = async (req, res, next) => {
       req.body.last_name &&
       req.body.email
     ) {
+      //? Generate colums, values to insert and placeholders(queryPrepared)
+      //? So it has the format of INSERT INTO(column1,column2...) VALUES($1, $2...) and values are mapped within an array
       const { columns, values, queryPrepared } = stringCreator.users(req.body);
 
-      const added = await executeQuery(
-        { db, tableName, role, columns, values, queryPrepared },
-        insertValues
-      );
+      const queryCommand = `INSERT INTO ${tableNames.USERS}(${columns}) VALUES(${queryPrepared}) RETURNING *;`;
 
-      if (!added) return res.status(400).send("Duplicity found");
+      try {
+        //? Retrieve the newly created user
+        const { rows } = await db.query(queryCommand, values);
+
+        if (rows[0]) {
+          res.status(201).send(rows[0]);
+        }
+      } catch (error) {
+        //? Usernames should be unique, so if this rule is violated, a specific error message should be sent
+        if (/user_username_key/.exec(error.message))
+          return res
+            .status(400)
+            .send({ message: "This username is probably already in use" });
+      }
 
       return next();
     }

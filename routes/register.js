@@ -34,7 +34,10 @@ const passport = require("passport");
 const { registerMiddleware } = require("../middlewares/registerMiddlewares");
 const router = express.Router();
 
-// Flow: pasport deserialize(unsuccess)->register middlewere->passport auth(generates cookies)
+//? Flow: pasport deserialize(unsuccess)->register middlewere->passport auth(generates cookies)
+
+//* POST register
+//? It sends back a user object
 router.post(
   "/",
   registerMiddleware,

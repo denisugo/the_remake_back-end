@@ -2,10 +2,7 @@ const { assert } = require("chai");
 const db = require("../../db");
 const { tableNames, roles } = require("../../config").constants;
 
-const {
-  updateUserMiddleware,
-  deleteUserMiddleware,
-} = require("../../middlewares/userMiddlewares");
+const { updateUserMiddleware } = require("../../middlewares/userMiddlewares");
 
 describe("User middlewares", () => {
   //? Mocking next function
@@ -120,7 +117,7 @@ describe("User middlewares", () => {
       assert.strictEqual(nextUsed, false);
       assert.strictEqual(
         sendUsed,
-        "400 This username is probably already in use"
+        `400 ${{ message: "This username is probably already in use" }}`
       );
     });
 
