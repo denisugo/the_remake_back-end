@@ -103,9 +103,9 @@ const {
 const ordersRouter = require("./orders");
 const cartRouter = require("./cart");
 //* orders endpoint
-router.use("/:id/orders", ordersRouter);
+router.use("/orders", ordersRouter);
 //* cart endpoint
-router.use("/:id/cart", cartRouter);
+router.use("/cart", cartRouter);
 
 //* GET user profile.
 router.get("/", loginVerification, getUserMiddleware);

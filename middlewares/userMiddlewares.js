@@ -29,7 +29,7 @@ const updateUserMiddleware = async (req, res, next) => {
     if (newValue && columnName) {
       try {
         //? Id and newValue should be passed as an array because user can manually change them
-        //? Rows is always an array, so the first valuu only should be taken
+        //? Rows is always an array, so the first value only should be taken
         const { rows } = await db.query(
           `UPDATE ${tableNames.USERS} SET ${columnName} = $1 WHERE id = $2 RETURNING *;`,
           [newValue, id]

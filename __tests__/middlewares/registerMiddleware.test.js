@@ -40,30 +40,6 @@ describe("Registration middlewares", () => {
     sendUsed = false;
   });
 
-  //   const tableName = tableNames.USERS;
-
-  //   describe("updateUserMiddleware", () => {
-  //     let selected;
-  //     const id = 1;
-
-  //     beforeEach(async () => {
-  //       //? Retrieve the object of the user
-  //       //? This will be used for resetting of the product in afterEach
-  //       selected = (
-  //         await db.query(`SELECT * FROM ${tableName} WHERE id = ${id};`)
-  //       ).rows[0];
-  //     });
-
-  //     afterEach(async () => {
-  //       //? Reset recently updated product
-  //       //? Execute update that will reset the query to its original values
-  //       const queryCommand = `UPDATE ${tableName} SET (username, password, first_name, last_name, email) = ('${selected.username}', '${selected.password}', '${selected.first_name}', '${selected.last_name}', '${selected.email}') WHERE id = ${id};`;
-  //       await db.query(queryCommand);
-  //     });
-  //     });
-
-  // });
-
   describe("registerMiddlewares", () => {
     //* New user parameters
     const body = {

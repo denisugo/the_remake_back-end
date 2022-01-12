@@ -539,136 +539,173 @@ describe("App", () => {
   //   });
   // });
 
-  // describe("GET/cart", () => {
-  //   const id = 3;
-  //   const username = "jTest";
-  //   const password = "anotherSecret";
+  describe("GET/cart", () => {
+    //* User credentials
+    const username = "jTest";
+    const password = "anotherSecret";
 
-  //   it("Should receive a cart ", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
-  //     server
-  //       .post("/api/v1/login")
-  //       .send({ username, password })
-  //       .expect(200)
-  //       .then(() => {
-  //         server.get(`/api/v1/users/${id}/cart`).expect(200, done);
-  //       });
-  //   });
+    it("Should receive a cart ", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
 
-  //   it("Should get nothing when unathorized  ", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
-  //     server.get(`/api/v1/users/${id}/orders`).expect(401, done);
-  //   });
-  // });
-  // describe("POST/cart", () => {
-  //   const user_id = 1; // With this user_id order table will be reset by another test
-  //   const body = {
-  //     product_id: 3,
-  //     quantity: 5,
-  //   };
+      //* Request setup
+      server
+        .post("/api/v1/login")
+        .send({ username, password })
+        .expect(200)
+        .then(() => {
+          server.get(`/api/v1/users/cart`).expect(200, done);
+        });
+    });
 
-  //   afterEach(async () => {
-  //     const role = roles.ADMIN_ROLE;
-  //     const tableName = tableNames.CARTS;
-  //     const queryCommand = `DELETE FROM ${tableName} WHERE user_id = ${user_id};`;
-  //     await executeQuery({ db, role, queryCommand }, simpleQuery);
-  //   });
+    it("Should get nothing when unathorized", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
 
-  //   it("Should add a new order to the order list", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
-  //     const username = "jb";
-  //     const password = "secret";
-  //     server
-  //       .post("/api/v1/login")
-  //       .send({ username, password })
-  //       .expect(200)
-  //       .then(() => {
-  //         server
-  //           .post(`/api/v1/users/${user_id}/cart`)
-  //           .send(body)
-  //           .expect(201, done);
-  //       });
-  //   });
+      //* Request setup
+      server.get(`/api/v1/users/orders`).expect(401, done);
+    });
+  });
 
-  //   it("Should send 401 when user is not registered", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
+  describe("POST/cart", () => {
+    //* body setup
+    const body = {
+      product_id: 3,
+      quantity: 5,
+    };
+    //* User credentials
+    const username = "jb";
+    const password = "secret";
 
-  //     server.post(`/api/v1/users/${user_id}/cart`).send(body).expect(401, done);
-  //   });
-  // });
-  // describe("PUT/cart", () => {
-  //   const user_id = 3;
-  //   const product_id = 3;
+    //* Setup user id
+    //? This id does not present in carts table
+    const user_id = 1;
 
-  //   const newQuantity = 10;
-  //   const body = { field: "quantity", value: newQuantity, product_id };
+    afterEach(async () => {
+      //? Delete the newly created record in the db
+      const queryCommand = `DELETE FROM ${tableNames.CARTS} WHERE user_id = ${user_id};`;
+      await db.query(queryCommand);
+    });
 
-  //   afterEach(async () => {
-  //     const tableName = tableNames.CARTS;
-  //     const role = roles.ADMIN_ROLE;
+    it("Should add a new order to the order list", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
+      //* Request setup
+      server
+        .post("/api/v1/login")
+        .send({ username, password })
+        .expect(200)
+        .then(() => {
+          server.post(`/api/v1/users/cart`).send(body).expect(201, done);
+        });
+    });
 
-  //     const quanttiy = 5;
+    it("Should send 401 when user is not registered", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
 
-  //     const queryCommand = `UPDATE ${tableName} SET quantity = ${quanttiy} WHERE user_id = ${user_id} AND product_id = ${product_id};`;
+      //* Request setup
+      server.post(`/api/v1/users/cart`).send(body).expect(401, done);
+    });
+  });
+  describe("PUT/cart", () => {
+    //* Database record details setup
+    //? Both of them permanently present in  the database
+    const user_id = 3;
+    const product_id = 3;
 
-  //     await executeQuery({ db, role, queryCommand }, simpleQuery);
-  //   });
+    //* body setup
+    const newQuantity = 10;
+    const body = { value: newQuantity, product_id };
 
-  //   it("Should edit an cart item in the cart list", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
-  //     const username = "jTest";
-  //     const password = "anotherSecret";
-  //     server
-  //       .post("/api/v1/login")
-  //       .send({ username, password })
-  //       .expect(200)
-  //       .then(() => {
-  //         server
-  //           .put(`/api/v1/users/${user_id}/cart`)
-  //           .send(body)
-  //           .expect(200, done);
-  //       });
-  //   });
+    //* User credentials
+    const username = "jTest";
+    const password = "anotherSecret";
 
-  //   it("Should send 401 when user is not registered", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
-  //     server.put(`/api/v1/users/${user_id}/cart`).send(body).expect(401, done);
-  //   });
-  // });
-  // describe("DELETE/cart", () => {
-  //   const product_id = 3;
-  //   const user_id = 3;
-  //   const quanttiy = 5;
+    let selected;
 
-  //   const body = { product_id };
+    beforeEach(async () => {
+      //? Retrieve the object of the cart
+      //? This will be used for resetting of the product in afterEach
+      selected = (
+        await db.query(
+          `SELECT * FROM ${tableNames.CARTS} WHERE user_id = ${user_id} AND product_id = ${product_id};`
+        )
+      ).rows[0];
+    });
+    it("Should edit an cart item in the cart list", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
+      //* Request setup
+      server
+        .post("/api/v1/login")
+        .send({ username, password })
+        .expect(200)
+        .then(() => {
+          server.put(`/api/v1/users/cart`).send(body).expect(200, done);
+        });
+    });
 
-  //   afterEach(async () => {
-  //     const role = roles.ADMIN_ROLE;
-  //     const tableName = tableNames.CARTS;
-  //     const queryCommand = `INSERT INTO ${tableName}(user_id, product_id, quantity) VALUES(${user_id}, ${product_id}, ${quanttiy}) ;`;
+    it("Should send 401 when user is not registered", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
+      //* Request setup
+      server.put(`/api/v1/users/cart`).send(body).expect(401, done);
+    });
+  });
+  describe("DELETE/cart", () => {
+    //* Database record details setup
+    //? Both of them permanently present in  the database
+    const product_id = 3;
+    const user_id = 3;
+    const quanttiy = 5;
 
-  //     await executeQuery({ db, role, queryCommand }, simpleQuery);
-  //   });
+    //* User credentials
+    const username = "jTest";
+    const password = "anotherSecret";
 
-  //   it("Should delete a cart item from the cart list", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
-  //     const username = "jTest";
-  //     const password = "anotherSecret";
-  //     server
-  //       .post("/api/v1/login")
-  //       .send({ username, password })
-  //       .expect(200)
-  //       .then(() => {
-  //         server
-  //           .delete(`/api/v1/users/${user_id}/cart`)
-  //           .send(body)
-  //           .expect(204, done);
-  //       });
-  //   });
-  //   it("Should send 401 when user is not registered", (done) => {
-  //     const server = request.agent(`http://localhost:${process.env.PORT}`);
+    //* Body setup
+    const body = { product_id };
 
-  //     server.delete(`/api/v1/users/${user_id}/cart`).expect(401, done);
-  //   });
-  // });
+    let selected;
+
+    beforeEach(async () => {
+      //? Retrieve the object of the cart
+      //? This will be used for resetting of the product in afterEach
+      selected = (
+        await db.query(
+          `SELECT * FROM ${tableNames.CARTS} WHERE user_id = ${user_id} AND product_id = ${product_id};`
+        )
+      ).rows[0];
+    });
+
+    afterEach(async () => {
+      //? Reset recently updated cart
+      //? Execute update that will reset the database to its original values
+      //? Trycatch should be here because the last test doesn't delete a cart record
+      try {
+        const queryCommand = `INSERT INTO ${tableNames.CARTS}(user_id, product_id, quantity) VALUES(${user_id}, ${product_id}, ${selected.quantity});`;
+        await db.query(queryCommand);
+      } catch (error) {}
+    });
+
+    it("Should delete a cart item from the cart list", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
+      //* Request setup
+      server
+        .post("/api/v1/login")
+        .send({ username, password })
+        .expect(200)
+        .then(() => {
+          server.delete(`/api/v1/users/cart`).send(body).expect(204, done);
+        });
+    });
+    it("Should send 401 when user is not registered", (done) => {
+      //* Initial server setup
+      const server = request.agent(`http://localhost:${process.env.PORT}`);
+      //* Request setup
+      server.delete(`/api/v1/users/cart`).expect(401, done);
+    });
+  });
 });

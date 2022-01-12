@@ -36,7 +36,6 @@
  *        type: object
  *        required:
  *          - product_id
- *          - field
  *          - value
  *        properties:
  *          product_id:
@@ -45,9 +44,6 @@
  *          value:
  *              type: integer
  *              description: The new quantity to be inserted
- *          field:
- *              type: string
- *              description: The 'quantity'
  */
 
 /**
@@ -59,16 +55,10 @@
 
 /**
  * @swagger
- * users/{id}/cart:
+ * users/cart:
  *  get:
  *    summary: Sends back an array of cart items
  *    tags: [Cart]
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
  *
  *    responses:
  *      200:
@@ -83,7 +73,7 @@
 
 /**
  * @swagger
- * users/{id}/cart:
+ * users/cart:
  *  post:
  *    summary: Adds a new item to the cart
  *    tags: [Cart]
@@ -93,12 +83,6 @@
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/Cart_item'
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
  *
  *    responses:
  *      201:
@@ -110,7 +94,7 @@
 
 /**
  * @swagger
- * users/{id}/cart:
+ * users/cart:
  *  put:
  *    summary: Updates a quantity of a product in the cart
  *    tags: [Cart]
@@ -120,12 +104,6 @@
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/Update_cart'
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
  *
  *    responses:
  *      200:
@@ -136,7 +114,7 @@
 
 /**
  * @swagger
- * users/{id}/cart:
+ * users/cart:
  *  delete:
  *    summary: Deletes a product from the cart
  *    tags: [Cart]
@@ -146,12 +124,6 @@
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/Delete_by_product_id'
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
  *
  *    responses:
  *      204:
@@ -176,15 +148,19 @@ const router = express.Router({ mergeParams: true });
 
 const checkoutRouter = require("./checkout");
 
-// Checkout endpoint
+//* Checkout endpoint
 router.use("/checkout", checkoutRouter);
 
-router.get("/", loginVerification, userIdVerification, getCartByUserMiddleware);
+//* GET cart
+router.get("/", loginVerification, getCartByUserMiddleware);
 
-router.post("/", loginVerification, userIdVerification, postCartMiddleware);
+//* POST cart
+router.post("/", loginVerification, postCartMiddleware);
 
-router.put("/", loginVerification, userIdVerification, putCartMiddleware);
+//* PUT cart
+router.put("/", loginVerification, putCartMiddleware);
 
-router.delete("/", loginVerification, userIdVerification, deleteCartMiddleware);
+//* DELETE cart
+router.delete("/", loginVerification, deleteCartMiddleware);
 
 module.exports = router;
