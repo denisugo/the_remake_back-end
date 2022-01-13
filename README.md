@@ -54,11 +54,7 @@ ORIGIN = http://localhost:3000
 SECRET_ENCRYPTION_KEY = micro_Cat
 SECRET_STRIPE_KEY = Your_Stripr_SK_Key
 
-SQL_USER = myuser
-SQL_PASSWORD = secret
-SQL_PORT = 5432
-SQL_HOST = localhost
-SQL_DATABASE = the_remake
+DATABASE_URL = postgres://myuser:secret@localhost:5432/the_remake
 ```
 
  <br />

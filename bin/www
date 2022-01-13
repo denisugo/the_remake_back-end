@@ -9,6 +9,16 @@ var debug = require("debug")("back-end-front-end:server");
 var http = require("http");
 require("dotenv").config();
 
+//* Print env setup
+console.log("process.env.PORT ", process.env.PORT);
+console.log("process.env.ORIGIN ", process.env.ORIGIN);
+console.log(
+  "process.env.SECRET_ENCRYPTION_KEY ",
+  process.env.SECRET_ENCRYPTION_KEY
+);
+console.log("process.env.SECRET_STRIPE_KEY ", process.env.SECRET_STRIPE_KEY);
+console.log("process.env.DATABASE_URL ", process.env.DATABASE_URL);
+
 /**
  * Get port from environment and store in Express.
  */
