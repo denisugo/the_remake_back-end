@@ -103,6 +103,7 @@ const deleteCartMiddleware = async (req, res, nex) => {
   const user_id = req.user.id;
   const body = req.body;
 
+  console.log(body, user_id);
   //? Should only proceed if body exists and contains product id
   if (body) {
     const product_id = body.product_id;
@@ -114,7 +115,6 @@ const deleteCartMiddleware = async (req, res, nex) => {
           `DELETE FROM ${tableNames.CARTS} WHERE user_id = ${user_id} AND product_id = $1 RETURNING *;`,
           [product_id]
         );
-
         //? if item was deleted send a confirmation
         if (rows[0]) return res.status(204).send("Successfully deleted");
       } catch (error) {}

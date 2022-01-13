@@ -9,7 +9,11 @@ const loginVerification = (req, res, next) => {
   } catch (error) {
     console.error(error);
   }
-  res.status(401).clearCookie("connect.sid").send("Unauthorized");
+  res
+    .status(401)
+    .clearCookie("connect.sid")
+    .clearCookie("user")
+    .send("Unauthorized");
 };
 
 /**

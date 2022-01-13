@@ -38,7 +38,7 @@ This is the remake of my previous portfolio project. It is aimed for improving a
 
 ### Links
 
-This is the API. It should work with [this client](https://github.com/denisugo/next-client-portfolio)
+This is the API. It should work with [this client](https://github.com/denisugo/the_remake_front_end)
 
 - All endpoints have the following prefix api/v1/
 - The endpoint documentation is on api/docs/

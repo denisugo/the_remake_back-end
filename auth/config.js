@@ -15,6 +15,7 @@ const authCheck = async (username, password, done) => {
       `SELECT * FROM ${tableNames.USERS} WHERE username = $1 AND password = $2;`,
       [username, password]
     );
+
     //? If rows[0] is not undefined, a user is found
     if (rows[0]) return done(null, rows[0]);
 
