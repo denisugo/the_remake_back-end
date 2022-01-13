@@ -55,6 +55,8 @@ SECRET_ENCRYPTION_KEY = micro_Cat
 SECRET_STRIPE_KEY = Your_Stripr_SK_Key
 
 DATABASE_URL = postgres://myuser:secret@localhost:5432/the_remake
+
+NODE_ENV = development
 ```
 
  <br />

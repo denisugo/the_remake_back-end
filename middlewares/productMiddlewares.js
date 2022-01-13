@@ -8,15 +8,15 @@ const {
   deleteValuesById,
 } = require("../queries");
 const db = require("../db");
-const { tableNames, roles } = require("../config").constants;
+const { tableNames } = require("../config").constants;
 const stringCreator = require("../queries/stringCreator");
-
-const tableName = tableNames.PRODUCTS;
 
 const getProductsMiddleware = async (req, res, next) => {
   //? Get products should send back a list with all available products
-  const { rows } = await db.query(`SELECT * FROM ${tableNames.PRODUCTS};`);
-  if (rows) return res.send(rows);
+  try {
+    const { rows } = await db.query(`SELECT * FROM ${tableNames.PRODUCTS};`);
+    if (rows) return res.send(rows);
+  } catch (error) {}
   return res.status(500).send("");
 };
 
