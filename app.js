@@ -30,6 +30,7 @@ app.use(
     secret: process.env.SECRET_ENCRYPTION_KEY || "default",
     maxAge: 60 * 60 * 24 * 1000, //? one day in miliseconds
     signed: false,
+    secure: process.env.NODE_ENV === "production",
   })
 );
 //TODO: test with cookie session
