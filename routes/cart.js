@@ -139,10 +139,7 @@ const {
   deleteCartMiddleware,
 } = require("../middlewares/cartMiddlewares");
 
-const {
-  loginVerification,
-  userIdVerification,
-} = require("../middlewares/loginMiddlewares");
+const { loginVerification } = require("../middlewares/loginMiddlewares");
 
 const router = express.Router({ mergeParams: true });
 

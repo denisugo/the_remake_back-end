@@ -1,6 +1,6 @@
 const { assert } = require("chai");
 const db = require("../../db");
-const { tableNames, roles } = require("../../config").constants;
+const { tableNames } = require("../../config").constants;
 
 const {
   getCartByUserMiddleware,

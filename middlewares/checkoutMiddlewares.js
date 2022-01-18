@@ -1,59 +1,39 @@
 const db = require("../db");
-const { tableNames, roles } = require("../config").constants;
-const {
-  executeQuery,
-  selectByUserId,
-  insertValues,
-  updateValuesByUserIdAndProductId,
-  deleteValuesByUserIdAndProductId,
-  selectById,
-} = require("../queries");
+const { tableNames } = require("../config").constants;
+const { executeQuery, selectByUserId, selectById } = require("../queries");
 const { asyncMap, asyncForEach } = require("../utils/asyncFunc");
 
 require("dotenv").config();
 
+//* Stripe setup
 const stripe = require("stripe")(process.env.SECRET_STRIPE_KEY);
 
-// const generateId = () => {
-//   return Math.floor(Math.random() * Date.now()) + Date.now();
-// };
+const calculateOrderAmount = async (user_id) => {
+  //? This function calculates the final price based on cart items
 
-const calculateOrderAmount = async (user) => {
-  const role = roles.REGISTERED_ROLE;
-  const tableName = tableNames.CARTS;
+  //* Generate query command
+  const queryCommand = `SELECT SUM(${tableNames.CARTS}.quantity * ${tableNames.PRODUCTS}.price)
+    FROM ${tableNames.CARTS}
+    JOIN ${tableNames.PRODUCTS}
+    ON ${tableNames.CARTS}.product_id = ${tableNames.PRODUCTS}.id
+    WHERE ${tableNames.CARTS}.user_id= ${user_id};`;
 
-  const selected = await executeQuery(
-    { db, role, tableName, user_id: user.id },
-    selectByUserId
-  );
-
-  if (JSON.stringify(selected) === "[]") return null;
-
-  let amount = 0;
-
-  await asyncForEach(selected, async (item) => {
-    const product = await executeQuery(
-      { db, role, tableName: tableNames.PRODUCTS, id: item.product_id },
-      selectById
-    );
-
-    if (product) amount += item.quantity * product.price;
-  });
+  //* Retrieve the amount
+  const amount = parseInt((await db.query(queryCommand)).rows[0].sum);
 
   return amount;
 };
 
 const postCheckoutMiddleware = async (req, res, next) => {
-  const calculatedAmount = await calculateOrderAmount(req.user);
+  const calculatedAmount = await calculateOrderAmount(req.user.id);
 
+  //? Should only proceed if calculated amount is available
   if (!calculatedAmount) return res.status(404).send("No cart found");
-  // Create a PaymentIntent with the order amount and currency
+
+  //* Generate  paymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculatedAmount * 100,
     currency: "usd",
-    // automatic_payment_methods: {
-    //   enabled: true,
-    // },
   });
 
   res.send({

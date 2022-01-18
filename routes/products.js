@@ -78,11 +78,6 @@
  *  get:
  *    summary: Sends back an array of all products filtered by category
  *    tags: [Products]
- *    parameters:
- *      - in: query
- *        name: category
- *        schema:
- *          type: string
  *
  *    responses:
  *      200:

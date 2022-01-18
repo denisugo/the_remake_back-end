@@ -71,7 +71,7 @@
 
 /**
  * @swagger
- * users/{id}/orders:
+ * users/orders:
  *  get:
  *    summary: Sends back an array of orders
  *    tags: [Orders]
@@ -94,7 +94,7 @@
 
 /**
  * @swagger
- * users/{id}/orders:
+ * users/orders:
  *  post:
  *    summary: Adds a new order
  *    tags: [Orders]
@@ -104,12 +104,6 @@
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/Checkout'
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
  *
  *    responses:
  *      201:
@@ -120,7 +114,7 @@
 
 /**
  * @swagger
- * users/{id}/orders:
+ * users/orders:
  *  put:
  *    summary: Updates a quantity of an order
  *    tags: [Orders]
@@ -130,13 +124,6 @@
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/Update_order'
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
- *
  *    responses:
  *      200:
  *        description: Updated
@@ -144,82 +131,43 @@
  *        description: Cannot be updated
  */
 
-/**
- * @swagger
- * users/{id}/orders:
- *  delete:
- *    summary: Deletes an order
- *    tags: [Orders]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/Delete_by_order_id'
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
- *
- *    responses:
- *      204:
- *        description: Successfully deleted
- *      400:
- *        description: The operation cannot be done
- */
-
 const express = require("express");
 
 const {
   loginVerification,
-  userIdVerification,
   isAdminVerification,
 } = require("../middlewares/loginMiddlewares");
 
 const {
   getOrdersByUserMiddleware,
-  putOrderMiddleware,
-  deleteOrderMiddleware,
+  // putOrderMiddleware,
+  // deleteOrderMiddleware,
   postOrderMiddleware,
 } = require("../middlewares/orderMiddlewares");
 
 const router = express.Router({ mergeParams: true });
 
-/* GET orders. */
-router.get(
-  "/",
-  loginVerification,
-  userIdVerification,
-  getOrdersByUserMiddleware
-);
+//* GET orders.
+router.get("/", loginVerification, getOrdersByUserMiddleware);
 
-/* PUT orders. */
-router.put(
-  "/",
-  loginVerification,
-  userIdVerification,
-  isAdminVerification,
-  putOrderMiddleware
-);
+// //* PUT orders.
+// router.put(
+//   "/",
+//   loginVerification,
+//   isAdminVerification,
+//   putOrderMiddleware
+// );
 
-/* POST orders. */
-router.post(
-  "/",
-  loginVerification,
-  userIdVerification,
-  isAdminVerification,
-  postOrderMiddleware
-);
+//* POST orders.
+router.post("/", loginVerification, isAdminVerification, postOrderMiddleware);
 
 /* DELETE orders. */
-router.delete(
-  "/",
-  loginVerification,
-  userIdVerification,
-  isAdminVerification,
-  deleteOrderMiddleware
-);
+// router.delete(
+//   "/",
+//   loginVerification,
+//   userIdVerification,
+//   isAdminVerification,
+//   deleteOrderMiddleware
+// );
 
 module.exports = router;

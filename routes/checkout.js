@@ -29,7 +29,7 @@
 
 /**
  * @swagger
- * users/{id}/cart/checkout:
+ * users/cart/checkout:
  *  post:
  *    summary: Checkout the provided cart
  *    tags: [Checkout]
@@ -39,12 +39,6 @@
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/Cart_items'
- *    parameters:
- *      - in: path
- *        name: id
- *        required: true
- *        schema:
- *          type: integer
  *
  *    responses:
  *      307:
@@ -58,14 +52,11 @@ const {
   postCheckoutMiddleware,
 } = require("../middlewares/checkoutMiddlewares");
 
-const {
-  loginVerification,
-  userIdVerification,
-} = require("../middlewares/loginMiddlewares");
+const { loginVerification } = require("../middlewares/loginMiddlewares");
 
 const router = express.Router({ mergeParams: true });
 
-// POST checkout
-router.post("/", loginVerification, userIdVerification, postCheckoutMiddleware);
+//* POST checkout
+router.post("/", loginVerification, postCheckoutMiddleware);
 
 module.exports = router;
