@@ -71,9 +71,22 @@
  *        description: Unauthorized when provided data is incorrect
  */
 
+/**
+ * @swagger
+ * /login/facebook:
+ *  get:
+ *    summary: Logs a user in via Facebook
+ *    tags: [Login]
+ *
+ *    responses:
+ *      302:
+ *        description: Redirects to facebook and then to the user page
+ */
+
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+require("dotenv").config();
 
 //* POST login
 //? Password is applied here
@@ -86,6 +99,17 @@ router.post(
   passport.authenticate("local", { session: true }),
   (req, res, next) => {
     res.send(req.user);
+  }
+);
+//* GET login/facebook
+//? Should redirect to user page
+router.get(
+  "/facebook",
+  passport.authenticate("facebook", {
+    session: true,
+  }),
+  (req, res, next) => {
+    res.redirect(`${process.env.ORIGIN}/login`);
   }
 );
 
