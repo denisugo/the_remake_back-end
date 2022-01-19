@@ -1,8 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
-// const path = require("path");
 const logger = require("morgan");
-// const session = require("express-session");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
 const cors = require("cors");
@@ -22,7 +20,12 @@ const app = express();
 
 //* basic setup
 app.set("trust proxy", true);
-app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+    credentials: true,
+  })
+);
 app.use(logger("dev"));
 app.use(
   cookieSession({
@@ -34,15 +37,7 @@ app.use(
     secure: process.env.NODE_ENV === "production",
   })
 );
-//TODO: test with cookie session
-// app.use(
-//   session({
-//     secret: process.env.SECRET_ENCRYPTION_KEY || "default",
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { maxAge: 60 * 60 * 24 * 1000 }, //? one day in miliseconds
-//   })
-// );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());

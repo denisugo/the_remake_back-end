@@ -112,9 +112,9 @@ router.get("/", loginVerification, getUserMiddleware);
 
 //* Logout user.
 router.get("/logout", (req, res) => {
-  console.log("logging out");
-  req.logout();
   res.clearCookie("connect.sid").send("Logged out");
+  req.logout();
+  console.log("logging out");
 });
 
 //* PUT user profile.
