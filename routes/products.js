@@ -33,7 +33,7 @@
  *        type: array
  *        items:
  *          $ref: '#/components/schemas/Product'
- * 
+ *
  *      Update:
  *        type: object
  *        required:
@@ -46,17 +46,7 @@
  *          value:
  *            type: string
  *            description: The value to be passed in
- * 
- *      Delete_by_id:
- *        type: object
- *        required:
- *          - id
- *        properties:
- *          id:
- *            type: integer
- *            description: The id of content to be updated
- 
- 
+ *
  */
 
 /**
@@ -161,12 +151,6 @@
  *        schema:
  *          type: integer
  *
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/Delete_by_id'
  *
  *    responses:
  *      204:
