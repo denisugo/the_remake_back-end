@@ -195,6 +195,12 @@ COPY public.carts (user_id, product_id, quantity) FROM stdin;
 
 COPY public.orders (id, product_id, quantity) FROM stdin;
 1	3	5
+2	3	1
+2	1	3
+3	1	4
+1462	1	1
+1463	1	1
+1464	1	1
 \.
 
 
@@ -203,8 +209,12 @@ COPY public.orders (id, product_id, quantity) FROM stdin;
 --
 
 COPY public.orders_users (order_id, user_id, shipped, transaction_id) FROM stdin;
-1454	1	f	pi_3KC1rKI6OSqfLBcY0SZNQlTh
 1	3	f	10
+2	1	f	100
+3	1	t	1000
+1462	1	f	pi_3KHo60I6OSqfLBcY1Yle3K4q
+1463	1	f	pi_3KHo6mI6OSqfLBcY1n2A3xHS
+1464	1	f	pi_3KHoAiI6OSqfLBcY1N6m7Q0u
 \.
 
 
@@ -213,12 +223,12 @@ COPY public.orders_users (order_id, user_id, shipped, transaction_id) FROM stdin
 --
 
 COPY public.products (id, name, description, price, category, preview) FROM stdin;
-3	Oil	NoDelete	90	health	https://images.unsplash.com/photo-1633171029787-3a1022cfc922?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80
-10	HomeOffice	New energy pills for your productive life	250	energy	https://images.unsplash.com/photo-1612475498158-014b71f98625?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2028&q=80
-13	Noname tabs	Open it and try to survive	10	other	https://images.unsplash.com/photo-1550572017-26b5655c1e8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80
-15	Blue tab	Self explaining name	100	health	https://images.unsplash.com/photo-1519994083223-e72116e38b7e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80
-12	Vichy	New liquid	200	health	https://images.unsplash.com/photo-1556227834-09f1de7a7d14?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80
-1	Cream	Clear your skin	100	health	https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80
+3	Oil	NoDelete	90	health	https://www.drmax.cz/_i/1079867443.webp?m2=%2Fmedia%2Fcatalog%2Fproduct%2Fe%2Fc%2Fec97776e7d8f5_hyaluron_serum_a.jpg&fit=contain&w=350&h=350&format=webp
+13	Noname tabs	Open it and try to survive	10	other	https://www.drmax.cz/_i/-1455556915.webp?m2=%2Fmedia%2Fcatalog%2Fproduct%2F3%2F6%2F36dc12ae92bf5_essentiale-300mg-100tob-cz-front-view.jpg&fit=contain&w=350&h=350&format=webp
+1	Cream	Clear your skin	100	health	https://www.drmax.cz/_i/-1008683360.webp?m2=%2Fmedia%2Fcatalog%2Fproduct%2Fr%2Fo%2Froseliane-creme-anti-rougeurs-riche-50ml-packpdt-ld.jpg&fit=contain&w=350&h=350&format=webp
+12	Vichy	New liquid	200	health	https://www.drmax.cz/_i/1468165904.webp?m2=%2Fmedia%2Fcatalog%2Fproduct%2Fv%2Fi%2Fvichy-cream-ideal-soleil-self-tanning-milk-000-3337871310714-boxed.jpg&fit=contain&w=350&h=350&format=webp
+10	HomeOffice	New energy pills for your productive life	250	energy	https://www.drmax.cz/_i/-1929538347.webp?m2=%2Fmedia%2Fcatalog%2Fproduct%2Fe%2F2%2Fe2e8260f62816_3d_r_cze_biopron_9_immunity_30_1990-box-1-cze-slo.jpg&fit=contain&w=350&h=350&format=webp
+15	Blue tab	Self explaining name	100	health	https://www.drmax.cz/_i/1231656576.webp?m2=%2Fmedia%2Fcatalog%2Fproduct%2Ft%2Fa%2Ftablety_24_cz-front_2.jpg&fit=contain&w=350&h=350&format=webp
 \.
 
 
@@ -230,6 +240,7 @@ COPY public.users (id, first_name, last_name, email, username, is_admin, passwor
 3	Jonny	TestNoDelete	JonnyTest@gmail.com	jTest	t	anotherSecret
 2071	Froggre	Chen	kim@kim.korea	kim	f	NewPass
 2	Dave	Sinclair	\tdave.sin@yahoo.com	davy000	f	treasure
+3064	Will	Yangescu	replacethisemail@example.com	106482475269039facebook	f	facebookSecret
 1	Joe	Barbora	joe_barbora@gmail.com	jb	t	secret
 \.
 
@@ -238,21 +249,21 @@ COPY public.users (id, first_name, last_name, email, username, is_admin, passwor
 -- Name: orders_users_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: denis
 --
 
-SELECT pg_catalog.setval('public.orders_users_order_id_seq', 1454, true);
+SELECT pg_catalog.setval('public.orders_users_order_id_seq', 1464, true);
 
 
 --
 -- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: denis
 --
 
-SELECT pg_catalog.setval('public.product_id_seq', 1982, true);
+SELECT pg_catalog.setval('public.product_id_seq', 2000, true);
 
 
 --
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: denis
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 3028, true);
+SELECT pg_catalog.setval('public.user_id_seq', 3071, true);
 
 
 --
